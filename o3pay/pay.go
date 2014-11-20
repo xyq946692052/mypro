@@ -1,4 +1,4 @@
-package main 
+package  main
 
 import (
   "fmt"
@@ -8,30 +8,30 @@ import (
   "bytes"
   "encoding/json"
 )
-
+   
 type PubData struct{
    Appid        string  //公众账号ID
    Mch_id       string  //商户号
    Sub_mch_id   string  //子商户号
    Nonce_str    string  //随机字符串
-   Sign         string  //签名
-}
 
+}
+   
 /*
  *提交被扫支付
  */
-type SweptPostData struct{
+type SweptPostData struct{  
    PubData                  //公共数据
    Device_info      string  //设备号
-   Body             string  //商品描述 
+   Body             string  //商品描述  
    Attach           string  //附加数据
-   Out_trade_no     string  //商户订单号  
+   Out_trade_no     string  //商户订单号
    Total_fee        int     //总金额
-   Spbill_create_ip string  //终端IP 
-   Time_start       string  //交易起始时间 
+   Spbill_create_ip string  //终端IP
+   Time_start       string  //交易起始时间
    Time_expire      string  //交易结束时间
    Goods_tag        string  //商品标记
-   Auth_code        string  //授权码       
+   Auth_code        string  //授权码
 }
 
 /*
@@ -60,13 +60,13 @@ type CloseOrderData struct{
 type RefundApplyData struct{
   PubData                    //公共数据
   Device_info        string  //设备号
-  Transaction_id     string  //微信订单号  
+  Transaction_id     string  //微信订单号
   Out_trade_no       string  //商户订单号
   Out_refund_no      string  //商户退款单号
   Total_fee          int     //总金额
-  Refund_fee         int     //退款金额 
+  Refund_fee         int     //退款金额
   Op_user_id         string  //操作员
-  Refund_channel     string  //退款渠道             
+  Refund_channel     string  //退款渠道
 }
 
 /*
@@ -77,7 +77,7 @@ type RefundQueryData struct{
   PubData                    //公共数据
   Device_info        string  //设备号
   Transaction_id     string  //微信订单号
-  Out_trade_no       string  //商户订单号 
+  Out_trade_no       string  //商户订单号
   Out_refund_no      string  //商户退款单号
   Total_fee          int     //总金额
   Refund_fee         int     //退款金额
@@ -86,10 +86,9 @@ type RefundQueryData struct{
 /*
  *冲正
  */
-
-type ReverseDepositData struct{
+   type ReverseDepositData struct{
   PubData                    //公共数据
-  Out_trade_no       string  //商户订单号  
+  Out_trade_no       string  //商户订单号
 }
 
 /*
@@ -97,12 +96,12 @@ type ReverseDepositData struct{
  */
 
 type BillData struct{
-  PubData                    //公共数据 
+  PubData                    //公共数据
   Device_info        string  //设备号
   Bill_date          string  //对账单日期
   Bill_type          string  //账单类型
 }
-
+  
 /*
  *被扫支付
  */
@@ -119,20 +118,19 @@ func SweptPost(device_info,body,attach,out_trade_no,spbill_create_ip,time_start,
     swp.Auth_code=auth_code
     swp.Total_fee=total_fee
     swp.PubData=pubData
-    
-   err= RequestData(swp,"http://api.mch.weixin.qq.com/pay/micropay")
+
+   err= RequestData(swp,"https://api.mch.weixin.qq.com/pay/micropay")
    if err!=nil{
       fmt.Println("SweptPost error")
    }
-    return  
+    return
 }
-
-/*
+/* 
  *被扫订单查询
  */
 
 func OrderQuery(transaction_id,out_trade_no string,pubData PubData)(err error){
-      var order OrderQueryData 
+      var order OrderQueryData
       order.Transaction_id=transaction_id
       order.Out_trade_no=out_trade_no
       order.PubData=pubData
@@ -142,8 +140,8 @@ func OrderQuery(transaction_id,out_trade_no string,pubData PubData)(err error){
           fmt.Println("orderQuery error")
        }
       return
-} 
-
+}
+          
 /*
  *关闭订单
  */
@@ -163,9 +161,8 @@ func CloseOrder(out_trade_no string,pubData PubData)(err error){
 /*
  *退款申请
  */
-
 func RefundApply(device_info,transaction_id,out_trade_no,out_refund_no,op_user_id,refund_channel string,total_fee,refund_fee int,pubData PubData)(err error){
-     var refApply RefundApplyData 
+     var refApply RefundApplyData
      refApply.Device_info=device_info
      refApply.Transaction_id=transaction_id
      refApply.Out_trade_no=out_trade_no
@@ -203,10 +200,9 @@ func RefundQuery(device_info,transaction_id,out_trade_no,out_refund_no string,to
       }
      return
 }
-
 /*
  *冲正
- */
+ */ 
 
 func ReverseDeposit(out_trade_no string,pubData PubData)(err error){
       var rd ReverseDepositData
@@ -230,23 +226,20 @@ func Bill(device_info,bill_date,bill_type string,pubData PubData)(err error){
       bill.Bill_date=bill_date
       bill.Bill_type=bill_type
       bill.PubData=pubData
-   
+
       err= RequestData(bill,"https://api.mch.weixin.qq.com/pay/downloadbill")
       if err!=nil{
          fmt.Println("bill error")
       }
       return
 }
-
-
-
 func RequestData(data interface{},url string)(err error){
      b,err:=json.Marshal(data)
   if(err!=nil){
       fmt.Println("json err:",err)
-   }
-
-
+   } 
+     
+  
   body:=bytes.NewBuffer([]byte(b))
   res,err:=http.Post(url,"application/json;charset=utf-8",body)
   if(err!=nil){
@@ -261,15 +254,19 @@ func RequestData(data interface{},url string)(err error){
   }
   fmt.Printf("ok----%s",result)
   return
-}
-
+}     
+  
 func main(){
- pubData:=PubData{"wxd930ea5d5a258f4f","123456","123456789","4564dfsdf","FASDF423FFSDF"}
-//   SweptPost("","","","","","","","","",1,pubData)
- OrderQuery("","",pubData)
+ pubData:=PubData{"wxd930ea5d5a258f4f","123456","123456789","4564dfsdf"}
+   SweptPost("","","","","","","","","",1,pubData)
+// OrderQuery("","",pubData)
 // CloseOrder("",pubData)
 // RefundApply("","","","","","",1,1,pubdata)
 // RefundQuery("","","","",1,1,pubData)
 // ReverseDeposit("",pubData)
 // Bill("",pubData)
 }
+
+
+                                                                                                                                  
+
