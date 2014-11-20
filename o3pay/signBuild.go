@@ -1,7 +1,6 @@
-package main
-
+package pay
 /*
- * 生成sign签名
+ * 生成signi签名
  */
 import (
 	"crypto/md5"
@@ -9,6 +8,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+        "strconv"
 )
 
 type MapSorter []Item
@@ -50,26 +50,47 @@ func md5Encry(s string) string {
 }
 
 func main() {
+        tl_fee:=100;
+        rf_fee:=120;
+        totalFee:=strconv.Itoa(tl_fee)
+        refundFee:=strconv.Itoa(rf_fee)
 	m := map[string]string{
 		"appid":            "wxd930khk43hkhkff5443d",
-		"auth_code":        "123456",
+                "sub_mch_id":        "",
+                "attach":            "",
+                "out_trade_no":      "",
+                "total_fee":         totalFee,
+                "title_start":       "",
+                "time_expire":       "",
+                "goods_tag":         "",
+                "auth_code":        "",
+                "transaction":       "",
+                "out_refund_no":     "",
+                "refund_fee":        refundFee,
+                "op_user_id":        "",
+                "refund_channel":    "",
 		"body":             "test",
 		"device_info":      "123",
 		"mch_id":           "19000000109",
-		"sub_mch_id":       "321",
 		"nonce_str":        "jhaksdjhfiyi68768p32ikjg23",
-		"total_fee":        "1",
+		"bill_date":         "",
+                "bill_type":         "",
 		"spbill_create_ip": "127.0.0.1",
 		"key":              "3rgk2j3gkj23g4kj23gkj324g43",
 	}
-
+        resStr(m)
+}
+  func resStr(m map[string]string) {
+       
 	ms := NewMapSorter(m)
 	sort.Sort(ms)
 
 	str1 := ""
 	for _, item := range ms {
-		// fmt.Printf("%s=%s&",item.Key,item.Val) // 获得map排序结果
-		str1 += item.Key + "=" + item.Val + "&"
+                if(item.Val !=""){
+		  // fmt.Printf("%s=%s&",item.Key,item.Val) // 获得map排序结果
+	         	str1 += item.Key + "=" + item.Val + "&"
+               }
 	}
 	key := "99dsas9gds98dfr98dvbdfsvb9a"
 	str2 := str1 + "key=" + key
