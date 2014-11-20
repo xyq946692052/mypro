@@ -119,7 +119,7 @@ func SweptPost(device_info,body,attach,out_trade_no,spbill_create_ip,time_start,
     swp.Total_fee=total_fee
     swp.PubData=pubData
 
-   err= RequestData(swp,"https://api.mch.weixin.qq.com/pay/micropay")
+   err= RequestData(swp,url)
    if err!=nil{
       fmt.Println("SweptPost error")
    }
@@ -135,7 +135,7 @@ func OrderQuery(transaction_id,out_trade_no string,pubData PubData)(err error){
       order.Out_trade_no=out_trade_no
       order.PubData=pubData
       
-      err= RequestData(order,"https://api.mch.weixin.qq.com/pay/orderquery")
+      err= RequestData(order,url)
       if err!=nil{
           fmt.Println("orderQuery error")
        }
@@ -151,7 +151,7 @@ func CloseOrder(out_trade_no string,pubData PubData)(err error){
       clsOrder.Out_trade_no=out_trade_no
       clsOrder.PubData=pubData
      
-      err= RequestData(clsOrder,"https://api.mch.weixin.qq.com/pay/closeorder")
+      err= RequestData(clsOrder,url)
       if err!=nil{
           fmt.Println("closeOrder error")
        }
@@ -173,7 +173,7 @@ func RefundApply(device_info,transaction_id,out_trade_no,out_refund_no,op_user_i
      refApply.Refund_fee=refund_fee
      refApply.PubData=pubData
 
-     err= RequestData(refApply,"https://api.mch.weixin.qq.com/secapi/pay/refund")
+     err= RequestData(refApply,url)
      if err!=nil{
          fmt.Println("refundApply error")
       }
@@ -194,7 +194,7 @@ func RefundQuery(device_info,transaction_id,out_trade_no,out_refund_no string,to
      refQuery.Refund_fee=refund_fee
      refQuery.PubData=pubData
 
-     err= RequestData(refQuery,"https://api.mch.weixin.qq.com/pay/refundquery")
+     err= RequestData(refQuery,url)
      if err!=nil{
          fmt.Println("refundQuery error")
       }
@@ -209,7 +209,7 @@ func ReverseDeposit(out_trade_no string,pubData PubData)(err error){
       rd.Out_trade_no=out_trade_no
       rd.PubData=pubData
 
-      err= RequestData(rd,"https://api.mch.weixin.qq.com/secapi/pay/reverse")
+      err= RequestData(rd,url)
       if err!=nil{
          fmt.Println("reverseDeposit error")
       }
@@ -227,7 +227,7 @@ func Bill(device_info,bill_date,bill_type string,pubData PubData)(err error){
       bill.Bill_type=bill_type
       bill.PubData=pubData
 
-      err= RequestData(bill,"https://api.mch.weixin.qq.com/pay/downloadbill")
+      err= RequestData(bill,url)
       if err!=nil{
          fmt.Println("bill error")
       }
